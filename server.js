@@ -66,9 +66,9 @@ app.listen(port, () => {
     console.log('Express server started at port : 3000');
 });
 
-
+ 
 app.use('/', require('./controllers/index-controller'));
-app.use('/users', require('./controllers/login-controller'));
+// app.use('/users', require('./controllers/login-controller'));
 
 
 
