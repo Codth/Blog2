@@ -12,12 +12,12 @@ const User = mongoose.model('User');
 const Post = mongoose.model('Post');
 var globalSecret;
 
-  
+
 var util = require('./util');
 var helper = require('../helper/encryption');
-require('/controllers/setting-controller-Login')(router);
-require('/controllers/comment-controller-Login')(router);
-require('/controllers/test-controller-Login')(router);
+require('setting-controller-Login')(router); 
+require('comment-controller-Login')(router);
+require('test-controller-Login')(router);
 
 
 
