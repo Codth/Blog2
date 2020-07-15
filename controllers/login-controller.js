@@ -10,14 +10,15 @@ const passport = require('passport');
 
 const User = mongoose.model('User');
 const Post = mongoose.model('Post');
+const Comment = mongoose.model('Comment');
 var globalSecret;
 
 
 var util = require('./util');
 var helper = require('../helper/encryption');
-require('setting-controller-Login')(router); 
-require('comment-controller-Login')(router);
-require('test-controller-Login')(router);
+// require('./setting-controller-Login')(router);
+// require('./comment-controller-Login')(router);
+// require('/test-controller-Login')(router);
 
 
 
@@ -461,6 +462,294 @@ router.get('/single/img/showroom/:id', (req, res) => {
     });
 });
 
+
+
+
+
+
+router.get('/setting/:id', ensureAuthenticated, (req, res) => {
+    User.findById(req.params.id, (err, doc) => {
+        if(!err){
+            res.render("view/setting/setting", {
+                header: "Setting",
+                indicator: req.isAuthenticated(),
+                user: req.user,
+                doc: doc
+            });
+        }
+    });
+});
+
+
+
+
+// User edit setting
+router.get('/setting/edit/:id', ensureAuthenticated, (req, res) => {
+    User.findById(req.params.id, (err, doc) => {
+        doc.save((err, doc) => {
+            res.render("view/setting/setting-edit", {
+                header: "Setting Edit",
+                indicator: req.isAuthenticated(),
+                user: req.user,
+                doc: doc
+            });
+        });
+    });
+});
+
+
+router.post('/setting/edit/:id', (req, res) => {
+    User.findById(req.params.id, (err, doc) => {
+
+        if(req.body.img){
+            let img = JSON.parse(req.body.avatar);
+            doc.avatar.contentType = img.type;
+            doc.avatar.name = img.name;
+            console.log(img.name);
+            doc.avatar.data="data:" + img.type + ";charset=utf-8;base64," + img.data.toString('base64');
+        }
+
+        doc.name = req.body.name;
+        doc.email = req.body.email;
+        doc.description  =req.body.description;
+
+        doc.save((err, doc) => {
+            res.render("view/setting/setting", {
+                header: "Setting",
+                indicator: req.isAuthenticated(),
+                user: req.user,
+                doc: doc
+            });
+        });
+    });
+});
+
+
+// User show
+router.get('/show/:id', util.paginatedResults(Post, {}, 12,'userShow'), (req, res) => {
+
+    User.findById(req.params.id, (err, person) => {
+
+        res.render("view/show/user_show", {
+            header: "Individual Show",
+            title: req.query.type,
+            indicator: req.isAuthenticated(),
+            user: req.user,
+            post: res.paginatedResults,
+            series :  res.series,
+            jump : res.jump,
+            highlight : req.query.page,
+            person: person
+        });
+    });
+});
+
+
+router.post('/single/comment/:id', ensureAuthenticated, (req, res) => {
+
+    let post_id = req.params.id;
+    let user_id = req.user.id;
+
+    console.log(req.body.parentid);
+    if(req.body.parentid){
+        User.findById(user_id, (err, people) => {
+
+            Post.findById(post_id, (err, doc) => {
+
+                for(var i =0; i<doc.comments.length; i++){
+                    if(doc.comments[i].id == req.body.parentid) {
+
+                        var comment = new Comment();
+                        comment.commentor = people.name;
+                        comment.commentor_avatar = people.avatar.data;
+
+                        comment.date = util.getDate();
+                        comment.messageContent = req.body.cMessage;
+                        comment.level =  parseInt(req.body.levelform);
+                        comment.parent = req.body.parentid;
+
+
+
+                        doc.comments[i].sub.push(comment);
+                        doc.save((err, doc) => {
+                            if(!err){
+                                console.log('ok');
+                                res.redirect(req.get('referer'));
+                            }else{
+                                console.log(err);
+                            }
+                        });
+                    }
+                }
+
+            });
+        });
+
+    }else{
+
+        User.findById(user_id, (err, people) => {
+            Post.findById(post_id, (err, doc) => {
+                var comment = new Comment();
+                comment.commentor = people.name;
+                comment.commentor_avatar = people.avatar.data;
+
+                comment.date = util.getDate();
+                comment.messageContent = req.body.cMessage;
+                comment.level =  parseInt(req.body.levelform);
+                comment.parent = req.body.parentid;
+
+                doc.comments.push(comment);
+
+                doc.save((err, doc) => {
+                    if(!err){
+                        console.log('ok');
+                        res.redirect(req.get('referer'));
+                    }else{
+                        console.log(err);
+                    }
+                });
+            });
+        });
+
+
+
+    }
+
+});
+
+router.post('/single/fuck/:id',ensureAuthenticated, (req, res) => {
+
+    let child_id = req.body.Comment_id;
+    let parent_id = req.body.parent_id;
+    let  post_id = req.params.id;
+    let level = req.body.level;
+
+    let newContent = req.body.newContent;
+    let position;
+
+
+    if(level==1){
+        Post.findById(post_id, (err, doc) => {
+            var comment = doc.comments.id(parent_id);
+
+            comment.messageContent = newContent;
+            comment.markModified('comment');
+
+            doc.save((err, doc) => {
+                if(!err){
+                    console.log('ok');
+                    res.redirect(req.get('referer'));
+                }else{
+                    console.log(err);
+                }
+            });
+        });
+
+    }else{
+        Post.findById(post_id, (err, doc) => {
+            var comment = doc.comments.id(parent_id);
+            for(var i=0; i< comment.sub.length; i++){
+                if(comment.sub[i]._id == child_id){
+                    position = i;
+                    break;
+                }
+            }
+
+            comment.sub[position].messageContent = newContent;
+            comment.markModified('sub');
+
+            doc.save((err, doc) => {
+                if(!err){
+                    console.log('ok');
+                    res.redirect(req.get('referer'));
+                }else{
+                    console.log(err);
+                }
+            });
+        });
+    }
+});
+
+
+router.get('/single/comment/delete/:id', (req, res) => {
+    let child_id = req.query.Comment_id;
+    let parent_id = req.query.parent_id;
+    let level = req.query.level;
+
+    let  post_id = req.params.id;
+    let position;
+
+
+    if(level==1){
+
+        Post.findById(post_id, (err, doc) => {
+            for(var i=0; i< doc.comments; i++){
+                if(doc.comments[i]._id == parent_id){
+                    position = i;
+                    break;
+                }
+            }
+
+            doc.comments.splice(position, 1);
+            doc.markModified('comments');
+
+            doc.save(function (err) {
+                if(err) {
+                    console.error('ERROR!');
+                }else{
+                    console.log('ok');
+                    res.redirect(req.get('referer'));
+                }
+
+            });
+        });
+
+    }else{
+        Post.findById(post_id, (err, doc) => {
+            var comment = doc.comments.id(parent_id);
+            for(var i=0; i< comment.sub.length; i++){
+                if(comment.sub[i]._id == child_id){
+                    position = i;
+                    break;
+                }
+            }
+
+            comment.sub.splice(position, 1);
+            comment.markModified('sub');
+
+            doc.save(function (err) {
+                if(err) {
+                    console.error('ERROR!');
+                }else{
+                    console.log('ok');
+                    res.redirect(req.get('referer'));
+                }
+
+            });
+
+
+        });
+    }
+
+
+
+});
+
+
+
+router.get("/test", (req, res, next) => {
+    request.get("https://api.spacexdata.com/v3/launches/latest", (err, response, body) => {
+
+        console.log(JSON.parse(body));
+        res.render('view/show/test', {
+            header: "Test",
+            indicator: req.isAuthenticated(),
+            user: req.user,
+            data: JSON.parse(body),
+            layout: false
+        });
+    });
+});
 
 
 
