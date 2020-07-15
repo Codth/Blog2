@@ -1,0 +1,259 @@
+<script src="https://cdn.tiny.cloud/1/018sziejtotssj1qs8xyvgwwv39sekgzrpkgj7565ap5xlwl/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<!--filepond-->
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+<!-- add before </body> -->
+<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js"></script>
+<link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet">
+<script src="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.js"></script>
+
+
+<section class="s-content s-content--top-padding s-content--narrow">
+
+    <style>
+
+        .border{
+            border-style: solid;
+            border-color: black;
+            border-radius: 10px;
+        }
+
+        .piece{
+            margin-top: 30px;
+            padding: 15px 15px 15px 15px;
+        }
+
+
+
+        .display-2 {
+            font-family: "Libre Baskerville", serif;
+            font-size: 3.3rem;
+            line-height: 1.25;
+            letter-spacing: -.15rem;
+            margin-top: 0;
+        }
+
+
+
+        .display-3 {
+            font-family: "Libre Baskerville", serif;
+            font-size: 2.5rem;
+            line-height: 1.25;
+            letter-spacing: -.15rem;
+            margin-top: 0;
+        }
+
+        .title2{
+            text-align: center;
+        }
+
+
+        .circular-square {
+            width: 90px;
+            height: 90px;
+            border-top-left-radius: 50% 50%;
+            border-top-right-radius: 50% 50%;
+            border-bottom-right-radius: 50% 50%;
+            border-bottom-left-radius: 50% 50%;
+        }
+
+
+         .link{
+             color: #117a8b;
+             font-weight: bold
+         }
+
+        .link:hover{
+            text-decoration: underline;
+        }
+
+        #edit-name{
+            display: none;
+        }
+
+
+
+    </style>
+
+
+    <div id="vue-5">
+    <article class="row entry format-standard">
+
+        <h1 class="entry__header-title display-2 title2 ">
+            Setting
+        </h1>
+
+
+
+
+        <form ref='uploadForm'
+              id='uploadForm'
+              action='/users/setting/edit/{{doc.id}}'
+              method='post'
+              encType="multipart/form-data">
+
+
+            <div class="piece border">
+                <span   class="display-3" >Name:   </span>
+                <input  type="text" placeholder="Name" name="name" value="{{doc.name}}">
+
+                <span   class="display-3" >Email:   </span>
+                <input  type="text" placeholder="Email" name="email" value="{{doc.email}}">
+
+            </div>
+
+
+            <div class="piece border">
+                <p2 class="display-3">Avatar</p2>
+
+                <div style="height: 100px; width: 100px">
+                    <input type="file"
+                           class="filepond"
+                           name="avatar"
+                           id="avatar"
+                           accept="image/png, image/jpeg, image/gif"
+                           data-max-file-size="3MB">
+                </div>
+
+
+
+
+            </div>
+
+
+            <div  class="piece border">
+                <p2 class="display-3">Description</p2>
+                <textarea type="text" placeholder="Description" name="description">{{doc.description}}</textarea>
+            </div>
+
+
+            <button type="submit" class="btn btn--primary" style="margin-top: 30px">Confirm</button>
+
+
+        </form>
+
+
+
+
+    </article>
+
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#vue-5'
+        })
+    </script>
+
+
+
+    <script type="text/javascript">
+
+        tinymce.init({
+            selector: '#myTextarea',
+            plugins: 'image code',
+            toolbar: 'undo redo | link image | code',
+            // enable title field in the Image dialog
+            image_title: true,
+            // enable automatic uploads of images represented by blob or data URIs
+            automatic_uploads: true,
+            // URL of our upload handler (for more details check: https://www.tinymce.com/docs/configure/file-image-upload/#images_upload_url)
+            // images_upload_url: 'postAcceptor.php',
+            // here we add custom filepicker only to Image dialog
+            file_picker_types: 'image',
+            height : "560",
+            // and here's our custom image picker
+            file_picker_callback: function(cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                // Note: In modern browsers input[type="file"] is functional without
+                // even adding it to the DOM, but that might not be the case in some older
+                // or quirky browsers like IE, so you might want to add it to the DOM
+                // just in case, and visually hide it. And do not forget do remove it
+                // once you do not need it anymore.
+
+                input.onchange = function() {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        // Note: Now we need to register the blob in TinyMCEs image blob
+                        // registry. In the next release this part hopefully won't be
+                        // necessary, as we are looking to handle it internally.
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        // call the callback and populate the Title field with the file name
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                    reader.readAsDataURL(file);
+                };
+
+                input.click();
+            }
+        });
+
+    </script>
+
+
+
+</section>
+
+
+<script>
+    function editname() {
+        document.getElementById('original-name').style.display = 'none';
+        document.getElementById('edit-name').style.display = '';
+    }
+
+
+
+    FilePond.registerPlugin(
+
+    // encodes the file as base64 data
+             FilePondPluginFileEncode,
+             FilePondPluginFileValidateType,
+            FilePondPluginImageExifOrientation,
+            FilePondPluginImagePreview,
+            FilePondPluginImageCrop,
+            FilePondPluginImageResize,
+            FilePondPluginImageTransform,
+            FilePondPluginImageEdit
+
+    );
+
+
+    FilePond.create(
+            document.querySelector('#avatar'),
+            {
+                imagePreviewHeight: 170,
+                imageCropAspectRatio: '1:1',
+                imageResizeTargetWidth: 200,
+                imageResizeTargetHeight: 200,
+                stylePanelLayout: 'compact circle',
+                styleLoadIndicatorPosition: 'center bottom',
+                styleProgressIndicatorPosition: 'right bottom',
+                styleButtonRemoveItemPosition: 'left bottom',
+                styleButtonProcessItemPosition: 'right bottom'
+            }
+    );
+
+</script>
+
+
+
+

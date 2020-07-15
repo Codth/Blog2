@@ -1,0 +1,56 @@
+.login{
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+
+}
+
+.login2{
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    float: left;
+
+}
+
+
+
+/*show/show.html*/
+.resize{
+    height: 64.89817%;
+}
+
+/*show/single.html*/
+.headImg{
+    width: 100%;
+    object-fit: cover;
+}
+
+/* post/newpost.html => tinyMCE*/
+.mceContentBody{
+    background-color: #f2f2f2;
+}
+
+
+.link{
+    color: #117a8b;
+    font-weight: bold;
+    font-size: large;
+}
+
+.link:hover{
+    text-decoration: underline;
+}
+
+.limiter{
+    background-image: url("/images/bgp.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+

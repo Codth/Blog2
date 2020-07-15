@@ -1,0 +1,136 @@
+<script src="https://cdn.tiny.cloud/1/018sziejtotssj1qs8xyvgwwv39sekgzrpkgj7565ap5xlwl/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<section class="s-content s-content--top-padding s-content--narrow">
+
+    <style>
+
+        .border{
+            border-style: solid;
+            border-color: black;
+            border-radius: 10px;
+        }
+
+        .piece{
+            margin-top: 30px;
+            padding: 15px 15px 15px 15px;
+        }
+
+
+
+        .display-2 {
+            font-family: "Libre Baskerville", serif;
+            font-size: 3.3rem;
+            line-height: 1.25;
+            letter-spacing: -.15rem;
+            margin-top: 0;
+        }
+
+
+
+        .display-3 {
+            font-family: "Libre Baskerville", serif;
+            font-size: 2.5rem;
+            line-height: 1.25;
+            letter-spacing: -.15rem;
+            margin-top: 0;
+        }
+
+        .title2{
+            text-align: center;
+        }
+
+    </style>
+
+
+    <article class="row entry format-standard">
+
+
+
+        <h1 class="entry__header-title display-2 title2 ">
+            New Post
+        </h1>
+
+
+        <div id="vue-4">
+
+
+        <div>
+            <h2> My Posts (<span id = 'totalCount'></span>) </h2>
+            <table class="table">
+                <thead>
+                <tr>
+
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+
+
+
+                    {{#each doc}}
+                        <tr>
+                            <th scope="row" class="tag"></th>
+
+                            <td> <a href="/users/single/{{this.id}}">
+                                {{this.title}}
+                                <i v-if=" '{{this.privacy}}' == 'Private' " style="color: red">*</i>
+                            </a>
+                            </td>
+                            <td> <a href="/users/category/{{this.author}}?type={{this.category}}&page=1">{{this.category}}</a> </td>
+                            <td>{{this.date}}</td>
+                            <td> <a href="/users/single/modify/{{this.id}}"><i class="fas fa-pencil-alt fa-lg"></i></a></td>
+                            <td><a href="/users/single/delete/{{this.id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a></td>
+                        </tr>
+
+                    {{/each}}
+
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+
+
+        </div>
+
+
+
+
+
+
+
+
+    </article>
+
+
+
+</section>
+
+
+
+<script>
+
+    var list = document.getElementsByClassName("tag");
+    for (var i = 1; i <= list.length; i++) {
+        list[i-1].innerHTML = i;
+    }
+    document.getElementById('totalCount').innerText = list.length;
+</script>
+
+
+<script>
+    var app = new Vue({
+        el: '#vue-4',
+        data: {
+            message: 'Hello Vue!'
+        }
+    })
+</script>

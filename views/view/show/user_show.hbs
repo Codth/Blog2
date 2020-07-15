@@ -1,0 +1,121 @@
+
+<style>
+    .circular-square {
+        width: 120px;
+        height: 120px;
+        border-top-left-radius: 50% 50%;
+        border-top-right-radius: 50% 50%;
+        border-bottom-right-radius: 50% 50%;
+        border-bottom-left-radius: 50% 50%;
+    }
+
+</style>
+
+<!-- s-content
+================================================== -->
+<section class="s-content s-content--top-padding">
+
+    <!--  Big Title -->
+    <div class="row narrow">
+        <div class="col-full s-content__header" data-aos="fade-up" >
+
+            <h1 class="display-1 display-1--with-line-sep" >{{person.name}}</h1>
+            <img  class="circular-square"  src="{{person.avatar.data}}" alt="{{person.avatar.name}}" style="display: inline">
+
+            <p class="lead">{{person.description}}</p>
+        </div>
+    </div>
+
+
+
+    <div class="row entries-wrap add-top-padding wide">
+        <div class="entries">
+
+<!--     ------------------------------- Card  IN -----------------------------------------------------------------     -->
+{{#each post.results}}
+
+            <article class="col-block">
+
+                <div class="item-entry" data-aos="zoom-in">
+                    <div class="item-entry__thumb resize">
+                        <a href="/users/single/{{this.id}}" class="item-entry__thumb-link">
+                            <img src="{{this.imgRec.data}}"  alt="{{this.imgRec.name}}">
+                        </a>
+                    </div>
+
+                    <div class="item-entry__text">
+                        <div class="item-entry__cat">
+                            <a href="/xxxxxxxx">{{this.category}}</a>
+                        </div>
+
+                        <h1 class="item-entry__title"><a href="/users/single/{{this.id}}">{{this.title}}</a></h1>
+
+                        <div class="item-entry__date">
+                            <a href="/users/single/{{this.id}}">{{this.date}}</a>
+                        </div>
+                    </div>
+                </div> <!-- item-entry -->
+
+            </article> <!-- end article -->
+
+{{/each}}
+            <!--     ------------------------------- Card  OUT -----------------------------------------------------------------     -->
+
+        </div> <!-- end entries -->
+    </div> <!-- end entries-wrap -->
+
+
+<!--    Pagination    -->
+<div id = "vue-pagination">
+    <div class="row pagination-wrap">
+        <div class="col-full">
+            <nav class="pgn" data-aos="fade-up">
+                <ul>
+                    <li v-show={{post.previous.page}}>
+                        <a class="pgn__prev" href="/show?page={{post.previous.page}}">Prev</a>
+                    </li>
+
+                    {{#each series}}
+                        <li v-if=" '{{this}}' == '...' " >
+                            <a class="pgn__num dots" href="/show?page={{../jump}}">…</a>
+                        </li>
+
+                        <li v-else>
+                            <a v-if=" '{{this}}'=='{{../highlight}}'"  class="pgn__num current">
+                                {{this}}
+                            </a>
+                            <a v-else    class="pgn__num"  href="/show?page={{this}}"   >
+                               {{this}}
+                            </a>
+                        </li>
+                    {{/each}}
+                    <li v-show={{post.next.page}}>
+                        <a class="pgn__next" href="/show?page={{post.next.page}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+        var app = new Vue({
+            el: '#vue-pagination',
+            data: {
+                message: 'Hello Vue!'
+            }
+        })
+    </script>
+
+
+
+
+
+
+
+</section> <!-- end s-content -->
+
+
+
+

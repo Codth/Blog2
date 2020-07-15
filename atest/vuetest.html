@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<style>
+    .active{
+        color: red;
+    }
+
+    .jerk{
+        font-weight: bolder;
+    }
+</style>
+<body>
+
+
+<div id="app">
+
+    <div v-if="check()"  v-bind:class="{ active: 'voc'== 'vlc', jerk: 'true' }">
+        in if
+    </div>
+
+    <div v-else>
+        else somewhere the Fucking way goes to
+    </div>
+
+
+</div>
+
+
+</body>
+</html>
+
+
+
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        methods:{
+            check: function () {
+                return true;
+            }
+        }
+    })
+</script>
+
+
+
+
+
+

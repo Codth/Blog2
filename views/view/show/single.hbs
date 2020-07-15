@@ -1,0 +1,403 @@
+<style>
+    .expandbox {
+        text-align: center;
+        background-color: white;
+        border-radius: 10px;
+        padding: 5px;
+    }
+
+    .edit_text {
+        border: none;
+        border-bottom-color: dodgerblue;
+    }
+
+    .submitbutton {
+        text-align: center;
+        background-color: white;
+        border-radius: 10px;
+        height: 38px;
+        width: 140px;
+    }
+
+
+
+
+     .link{
+         color: #117a8b;
+         font-weight: bold
+     }
+
+    .link:hover{
+        text-decoration: underline;
+    }
+
+
+
+</style>
+
+
+<!-- s-content
+    ================================================== -->
+<section class="s-content s-content--top-padding s-content--narrow">
+
+    <article class="row entry format-standard">
+
+        <div class="entry__media col-full media_resize">
+            <div class="entry__post-thumb">
+                <img src={{post.img.data}}
+                     alt={{post.img.name}}
+                     class="headImg">
+            </div>
+        </div>
+
+
+        <div id="vue-3">
+
+            <div class="entry__header col-full">
+                <h1 class="entry__header-title display-1">
+                    {{post.title}}
+                </h1>
+                <ul class="entry__header-meta">
+                    <li class="date">{{post.date}}</li>
+                    <li class="byline">
+                        By
+                        <a class="link" style="color: #117a8b"
+                           href="/users/show/{{author.id}}?page=1">{{author.name}}</a>
+                    </li>
+
+
+                    <li class="byline" v-if="  '{{post.privacy}}' == 'Private'   ">
+                        <a href="#0" style="color: red">PRIVATE</a>
+                    </li>
+
+
+                    <li class="byline">
+                        Viewtimes:
+                        <span>{{post.viewtimes}}</span>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
+
+        <div class="col-full entry__main">
+
+            <p class="lead drop-cap">{{post.intro}}</p>
+
+
+            {{{post.content}}}
+
+
+
+            <div class="entry__author">
+                <img src="{{author.avatar.data}}" alt="{{author.avatar.name}}">
+
+                <div class="entry__author-about">
+                    <h5 class="entry__author-name">
+                        <span>Posted by</span>
+                        <a href="#0">{{author.name}}</a>
+                    </h5>
+
+                    <div class="entry__author-desc">
+                        <p id='short'>
+                            {{author.description}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div> <!-- s-entry__main -->
+
+
+    </article> <!-- end entry/article -->
+
+
+    <div class="s-content__entry-nav">
+        <div class="row s-content__nav">
+            <div class="col-six s-content__prev">
+                <a href="/users/single/{{previous._id}}" rel="prev">
+                    <span>Previous Post</span>
+                    {{previous.title}}
+                </a>
+            </div>
+            <div class="col-six s-content__next">
+                <a href="/users/single/{{next._id}}" rel="next">
+                    <span>Next Post</span>
+                    {{next.title}}
+                </a>
+            </div>
+        </div>
+    </div> <!-- end s-content__pagenav -->
+
+
+    <!---------------------------------------- Comment box here ------------------------------------------------------------------>
+
+
+    <div class="comments-wrap">
+
+        <div id="comments" class="row">
+            <div class="col-full">
+
+                <h3 class="h2">{{commentsNum}} Comments</h3>
+
+                <!-- START commentlist -->
+                <ol class="commentlist">
+
+
+                    <!--                         Single comment ---------------------------------------------------------->
+
+                    <div id="vue-10">
+                        {{#each post.comments}}
+                            <li class="thread-alt depth-1 comment">
+                                <div class="comment__avatar">
+                                    <img class="avatar" src="{{this.commentor_avatar}}" alt="" width="50" height="50">
+                                </div>
+
+                                <div class="comment__content">
+                                    <div class="comment__info">
+                                        <div class="comment__author" id="commemtor">{{this.commentor}}</div>
+
+                                        <div class="comment__meta">
+                                            <div class="comment__time">{{this.date}}</div>
+                                            <div class="comment__reply row">
+                                                <a class="comment-reply-link"
+                                                   onclick="reply('{{this.commentor}}', '{{this._id}}')"
+                                                   href="#0"
+                                                >Reply</a>
+
+                                                <div v-if=" '{{this.commentor}}' == '{{../user.name}}'" style="float: right">
+                                                    <a class="comment-reply-link link"
+                                                       onclick="expand('{{this._id}}')"
+                                                       >...</a>
+                                                    <div class='expandbox' id='{{this._id}}'
+                                                         style=" display: none;">
+                                                        <div class="comment__reply">
+                                                            <a class="comment-reply-link link"
+                                                               onclick="edit('{{this._id}}')"
+                                                               href="#0"
+                                                               style="color: dodgerblue">Edit</a>
+                                                            <a class="comment-reply-link link"
+                                                               href ="/users/single/comment/delete/{{../post._id}}?parent_id={{this._id}}&level=1"
+                                                               onclick="return confirm('Are you sure to delete this comment?');"
+                                                               style="color: red;">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="comment__text">
+                                        <p>{{this.messageContent}}</p>
+                                    </div>
+
+                                    <div style="display: none" id="edit{{this._id}}">
+                                        <div class="wrap-input100">
+                                            <form class="login100-form validate-form"
+                                                  action="/users/single/fuck/{{../post._id}}"
+                                                  method="POST">
+
+
+                                                <input class="input100" style="width: 300px"
+                                                       name="newContent" value="{{this.messageContent}}">
+                                                <input type="hidden" name="parent_id"
+                                                       value="{{this._id}}"/>
+                                                <input type="hidden" name="level"
+                                                       value="1"/>
+
+                                                <input name="submit" id="submit"
+                                                       class="btn btn--p rimary btn-wide btn--large full-width"
+                                                       value="Confirm"
+                                                       type="submit"/>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!--                                  Children                                -->
+                                <ul class="children">
+                                    {{#each this.sub}}
+
+
+                                        <li class="depth-2 comment">
+
+                                            <div class="comment__avatar">
+                                                <img class="avatar" src="{{this.commentor_avatar}}" alt="" width="50"
+                                                     height="50">
+                                            </div>
+
+                                            <div class="comment__content">
+                                                <div class="comment__info">
+                                                    <div class="comment__author" id="commemtor">{{this.commentor}}</div>
+                                                    <div class="comment__meta">
+                                                        <div class="comment__time">{{this.date}}</div>
+
+                                                            <div class="comment__reply row">
+                                                                <a class="comment-reply-link"
+                                                                   onclick="reply('{{this.commentor}}', '{{../this._id}}')"
+                                                                   href="#0"
+                                                                   >Reply</a>
+
+
+                                                                <div v-if=" '{{this.commentor}}' == '{{../../user.name}}'" style="float: right">
+                                                                    <a class="comment-reply-link link"
+                                                                       onclick="expand('{{this._id}}')"
+                                                                       href="#0">...</a>
+                                                                    <div class='expandbox' id='{{this._id}}'
+                                                                         style=" display: none;">
+                                                                        <div class="comment__reply">
+                                                                            <a class="comment-reply-link link"
+                                                                               onclick="edit('{{this._id}}')"
+                                                                               style="color: dodgerblue">Edit</a>
+                                                                            <a class="comment-reply-link link"
+                                                                               href ="/users/single/comment/delete/{{../../post._id}}?parent_id={{../this._id}}&Comment_id={{this._id}}&level=2"
+                                                                               onclick="return confirm('Are you sure to delete this comment?');"
+                                                                               style="color: red;">Delete</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+                                                            </div>
+                                                    </div>
+
+                                                    <div class="comment__text">
+                                                        <p>{{this.messageContent}}</p>
+                                                    </div>
+
+                                                    <div style="display: none" id="edit{{this._id}}">
+
+                                                        <div class="wrap-input100">
+
+                                                            <form class="login100-form validate-form"
+                                                                  action="/users/single/fuck/{{../../post._id}}"
+                                                                  method="POST">
+
+
+                                                                <input class="input100" style="width: 300px"
+                                                                       name="newContent" value="{{this.messageContent}}">
+                                                                <input type="hidden" name="Comment_id"
+                                                                       value="{{this._id}}"/>
+                                                                <input type="hidden" name="parent_id"
+                                                                       value="{{../this._id}}"/>
+                                                                <input type="hidden" name="level"
+                                                                       value="2"/>
+
+                                                                <input name="submit" id="submit"
+                                                                       class="btn btn--p rimary btn-wide btn--large full-width"
+                                                                       value="Confirm" type="submit"/>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+
+                                                    <input type="hidden" id="hiddenid" value="{{this.id}}"/>
+                                                    <input type="hidden" id="level" value="{{this.level}}"/>
+                                                </div>
+                                            </div>
+
+                                        </li>
+
+
+                                    {{/each}}
+
+                                </ul>
+                            </li>
+                        {{/each}}
+                    </div>
+
+                    <!-- end comment level 1 -------------------------------------------------------->
+
+
+                </ol>
+                <!-- END commentlist -->
+
+            </div> <!-- end col-full -->
+        </div> <!-- end comments -->
+
+
+        <!---------------------------------------- Comment input box here ------------------------------------------------------------------>
+
+
+        <div class="row comment-respond">
+
+            <!-- START respond -->
+            <div id="respond" class="col-full">
+
+                <h3 class="h2">Add Comment</h3>
+
+                <form name="contactForm" id="contactForm" method="post" action="/users/single/comment/{{post.id}}"
+                      autocomplete="off">
+                    <fieldset>
+
+                        <div class="message form-field">
+                            <textarea name="cMessage" id="cMessage" class="full-width"
+                                      placeholder="Your Message*"></textarea>
+                        </div>
+
+
+                        <input name="submit" id="submit" class="btn btn--p rimary btn-wide btn--large full-width"
+                               value="Add Comment" type="submit">
+                        <input type="hidden" id="parentid" name="parentid" value=""/>
+                        <input type="hidden" id="levelform" name="levelform" value=""/>
+
+                    </fieldset>
+                </form> <!-- end form -->
+
+
+            </div>
+            <!-- END respond-->
+
+        </div> <!-- end comment-respond -->
+
+
+</section> <!-- end s-content -->
+
+
+<script>
+    // var text =  document.getElementById('short').innerText.split(' ');
+    // if(text.length>30){
+    //     text = text.subarray(0,30);
+    //
+    //     text = text.join('');
+    //     alert(text);
+    // }
+    // document.getElementById('short').innerText = text;
+</script>
+
+
+<script>
+
+    function reply(name, parent_id){
+        document.getElementById('cMessage').value = '@' + name;
+        document.getElementById('parentid').value = parent_id;
+    }
+
+
+    function expand(id) {
+        if (document.getElementById(id).style.display == 'none') {
+            document.getElementById(id).style.display = '';
+        } else {
+            document.getElementById(id).style.display = 'none';
+        }
+    }
+
+    function edit(id) {
+        let target = "edit" + id;
+        document.getElementById(target).style.display = '';
+    }
+
+
+    var app = new Vue({
+        el: '#vue-10'
+    })
+    var app = new Vue({
+        el: '#vue-3'
+    })
+
+
+</script>

@@ -1,0 +1,52 @@
+
+
+<section class="s-featured">
+
+
+    <h1> EMPTY </h1>
+
+
+
+            <p> {{user.name}}</p>
+            <p> {{user.email}}</p>
+            <p> {{user.password}}</p>
+
+
+
+
+    <div id="app2">
+        \{{ message }}
+
+        <button v-on:click="greet"> Click </button>
+
+        <p>\{{ num }}</p>
+
+    </div>
+
+
+
+</section>
+
+<script>
+    var app = new Vue({
+        el: '#app2',
+        data: {
+            message: '{{user.name}}',
+            num : 1,
+            pass: parseInt('{{data}}')
+        },
+        methods: {
+            greet: function(){
+                this.num = this.pass;
+
+
+            }
+        }
+    })
+
+</script>
+
+
+
+
+

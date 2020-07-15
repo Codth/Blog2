@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+
+    <!--- basic page needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <title>{{header}}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- mobile specific metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet"  type="text/css" href="/css/base.css">
+    <link rel="stylesheet"  type="text/css" href="/css/vendor.css">
+    <link rel="stylesheet"  type="text/css" href="/css/main.css">
+    <link rel="stylesheet"  type="text/css" href="/css/custom.css">
+
+    <!-- script
+    ================================================== -->
+    <script src="/js/modernizr.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- favicons
+    ================================================== -->
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+
+    <!-- File pond -->
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+    <script  src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script  src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+    <script  src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+    <script  src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+
+
+    <!-- add before </body> -->
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+
+</head>
+
+
+<body id="top">
+
+<!-- preloader
+================================================== -->
+<div id="preloader">
+    <div id="loader" class="dots-fade">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+
+
+<!-- header
+==================================================  -->
+<header class="s-header header" id="mainNav">
+
+    <div class="header__logo">
+        <a class="logo" href="index.hbs">
+            <img src="/images/logo.svg" alt="Homepage">
+        </a>
+    </div> <!-- end header__logo -->
+
+    <a class="header__search-trigger" href="#"></a>
+    <div class="header__search">
+
+        <form role="search" method="get" class="header__search-form" action="/search">
+            <label>
+                <span class="hide-content">Search for:</span>
+                <input type="search" class="search-field" placeholder="Type Keywords" value="" name="q" title="Search for:" autocomplete="off">
+                <input type="hidden" name="page" value="1" />
+            </label>
+            <input type="submit" class="search-submit" value="Search">
+        </form>
+
+        <a href="#0" title="Close Search" class="header__overlay-close">Close</a>
+
+    </div>  <!-- end header__search -->
+
+
+    <a class="header__toggle-menu" href="#0" title="Menu"><span>Menu</span></a>
+    <nav class="header__nav-wrap">
+
+        <h2 class="header__nav-heading h6">Navigate to</h2>
+
+        <div id="app">
+            <ul class="header__nav">
+                <li class="current"><a href="/" title="">Home</a></li>
+                <li class="has-children">
+                    <a href="#0" title="">Categories</a>
+                    <ul class="sub-menu">
+                        <li><a href="/category/Lifestyle?page=1">Lifestyle</a></li>
+                        <li><a href="/category/Travel?page=1">Travel</a></li>
+                        <li><a href="/category/Food?page=1">Food</a></li>
+                        <li><a href="/category/Technology?page=1">Technology</a></li>
+                        <li><a href="/category/Creativity?page=1">Creativity</a></li>
+                    </ul>
+                </li>
+                <li class="has-children">
+                    <a href="#0" title="">Blog</a>
+                    <ul class="sub-menu">
+                        <li><a href="single-video.hbs">Video Post</a></li>
+                        <li><a href="/single-audio">Audio Post</a></li>
+                        <li><a href="/single-standard">Standard Post</a></li>
+                    </ul>
+                </li>
+                <li><a href="style-guide.hbs" title="">Styles</a></li>
+                <li><a href="/users/test" title="">Test</a></li>
+                <li><a href="/show?page=1" title="">Show</a></li>
+
+                <li v-if={{indicator}} class="has-children">
+                        <a href="users/login" class="login">{{user.name}}</a>
+                    <ul class="sub-menu">
+                        <li><a href="/users/empty">My account</a></li>
+                        <li><a href="/users/newpost">New Post</a></li>
+                        <li><a href="/users/myposts/{{user.id}}">My Posts</a></li>
+                        <li><a href="/users/setting/{{user.id}}">Setting</a></li>
+                        <li><a href="/users/logout">Logout</a></li>
+                    </ul>
+                </li>
+
+                <li v-else><a href="/users/login" class="login">Login</a></li>
+
+
+
+            </ul> <!-- end header__nav -->
+        </div>
+
+        <a href="#0" title="Close Menu" class="header__overlay-close close-mobile-menu">Close</a>
+    </nav> <!-- end header__nav-wrap -->
+
+
+    <script>
+        var app = new Vue({
+            el: '#app'
+        });
+    </script>
+
+
+</header> <!-- s-header -->
+
+
+    {{{body}}}
+
+
+
+<!-- s-footer
+================================================== -->
+<footer class="s-footer" >
+
+    <div class="s-footer__main">
+        <div class="row">
+
+            <div class="col-six tab-full s-footer__about">
+
+                <h4>About Blog</h4>
+
+                <p>Record your life</p>
+
+            </div> <!-- end s-footer__about -->
+
+        </div>
+    </div> <!-- end s-footer__main -->
+
+    <div class="s-footer__bottom">
+        <div class="row">
+            <div class="col-six">
+                <div class="s-footer__copyright">
+                        <span><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved @ Chris.J.H</a>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+</span>
+                </div>
+            </div>
+
+        </div>
+    </div> <!-- end s-footer__bottom -->
+
+    <div class="go-top">
+        <a class="smoothscroll" title="Back to Top" href="#top"></a>
+    </div>
+
+</footer> <!-- end s-footer -->
+
+
+<!-- Java Script
+================================================== -->
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script>
+    var prevScrollpos = window.pageYOffset;
+    window.onscroll = function() {
+        var currentScrollPos = window.pageYOffset;
+        if (prevScrollpos > currentScrollPos) {
+            document.getElementById("mainNav").style.top = "0";
+        } else {
+            document.getElementById("mainNav").style.top = "-50px";
+        }
+        prevScrollpos = currentScrollPos;
+    }
+</script>
+
+</body>
+
+</html>
+
+
+

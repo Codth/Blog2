@@ -1,0 +1,199 @@
+
+<section class="s-featured">
+    <div class="row">
+        <div class="col-full">
+            <div class="featured-slider featured" data-aos="zoom-in">
+
+     {{#each rotate}}
+
+                <div class="featured__slide">
+                    <div class="entry">
+                        <div class="entry__background" style="background-image: url(data:{{this.img.data}})"></div>
+
+                        <div class="entry__content">
+                            <span class="entry__category"><a href="/category/{{this.category}}?page=1">{{this.category}}</a></span>
+
+                            <h1><a href="/users/single/{{this.id}}">{{this.title}}</a></h1>
+
+                            <div class="entry__info">
+                                <ul class="entry__meta" style="margin-left: 0px;">
+                                    <li><a  href="/users/show/{{this.author}}?page=1">{{this.author_name}}</a></li>
+                                    <li>{{this.date}}</li>
+                                </ul>
+                            </div>
+                        </div> <!-- end entry__content -->
+
+                    </div> <!-- end entry -->
+                </div> <!-- end featured__slide -->
+
+         {{/each}}
+
+
+            </div> <!-- end featured -->
+        </div>
+    </div>
+</section> <!-- end s-featured -->
+
+<!--   ---------------------------------------------------------------------------------------------------------    -->
+
+<div id = "vue-pagination">
+<!-- s-content
+================================================== -->
+<section class="s-content s-content--top-padding"  style="padding-top: 62px;">
+
+<!--    &lt;!&ndash;  Big Title &ndash;&gt;-->
+<!--    <div class="row narrow">-->
+<!--        <div class="col-full s-content__header" data-aos="fade-up">-->
+
+<!--            <div v-if="'{{query}}'">-->
+<!--                <h1 class="display-1 display-1--with-line-sep" >Search: {{query}}</h1>-->
+<!--                <h2 style="color: gray"> {{size}} results have found </h2>-->
+<!--            </div>-->
+
+
+<!--            <div v-else>-->
+<!--                <h1 class="display-1 display-1--with-line-sep">Show</h1>-->
+<!--                <p class="lead">Dolor similique vitae. Exercitationem quidem occaecati iusto. Id non vitae enim quas error dolor maiores ut. Exercitationem earum ut repudiandae optio veritatis animi nulla qui dolores.</p>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+
+
+    <div class="row entries-wrap add-top-padding wide">
+        <div class="entries">
+
+<!--     ------------------------------- Card  IN -----------------------------------------------------------------     -->
+{{#each post.results}}
+
+            <article class="col-block">
+
+                <div class="item-entry" data-aos="zoom-in">
+                    <div class="item-entry__thumb resize">
+                        <a href="/users/single/{{this.id}}" class="item-entry__thumb-link">
+                            <img src="{{this.imgRec.data}}"  alt="{{this.imgRec.name}}" style="max-height: 364px; width: 315px">
+                        </a>
+                    </div>
+
+                    <div class="item-entry__text">
+                        <div class="item-entry__cat">
+                            <span class="entry__category"><a href="/category/{{this.category}}?page=1">{{this.category}}</a></span>
+                        </div>
+
+
+
+
+                        <h1 class="item-entry__title"><a href="/users/single/{{this.id}}">{{this.title}}</a></h1>
+
+                        <div class="item-entry__date">
+                            <a href="/users/single/{{this.id}}">{{this.date}}</a>
+                        </div>
+                    </div>
+                </div> <!-- item-entry -->
+
+            </article> <!-- end article -->
+
+{{/each}}
+            <!--     ------------------------------- Card  OUT -----------------------------------------------------------------     -->
+
+        </div> <!-- end entries -->
+    </div> <!-- end entries-wrap -->
+
+
+<!--    Pagination    -->
+
+    <div v-if="'{{query}}'">
+        <div class="row pagination-wrap">
+            <div class="col-full">
+                <nav class="pgn" data-aos="fade-up">
+                    <ul>
+                        <li v-show={{post.previous.page}}>
+                            <a class="pgn__prev" href="/search?page={{post.previous.page}}&q={{query}}">Prev</a>
+                        </li>
+
+                        {{#each series}}
+                            <li v-if=" '{{this}}' == '...' " >
+                                <a class="pgn__num dots" href="/search?page={{../jump}}&q={{query}}">…</a>
+                            </li>
+
+                            <li v-else>
+                                <a v-if=" '{{this}}'=='{{../highlight}}'"  class="pgn__num current">
+                                    {{this}}
+                                </a>
+                                <a v-else    class="pgn__num"  href="/search?page={{this}}&q={{query}}"   >
+                                {{this}}
+                                </a>
+                            </li>
+                        {{/each}}
+                        <li v-show={{post.next.page}}>
+                            <a class="pgn__next" href="/search?page={{post.next.page}}&q={{query}}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+
+    <div v-else>
+
+        <div class="row pagination-wrap">
+            <div class="col-full">
+                <nav class="pgn" data-aos="fade-up">
+                    <ul>
+                        <li v-show={{post.previous.page}}>
+                            <a class="pgn__prev" href="/?page={{post.previous.page}}">Prev</a>
+                        </li>
+
+                        {{#each series}}
+                            <li v-if=" '{{this}}' == '...' " >
+                                <a class="pgn__num dots" href="/?page={{../jump}}">…</a>
+                            </li>
+
+                            <li v-else>
+                                <a v-if=" '{{this}}'=='{{../highlight}}'"  class="pgn__num current">
+                                    {{this}}
+                                </a>
+                                <a v-else    class="pgn__num"  href="/?page={{this}}"   >
+                                {{this}}
+                                </a>
+                            </li>
+                        {{/each}}
+                        <li v-show={{post.next.page}}>
+                            <a class="pgn__next" href="/?page={{post.next.page}}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+</div>
+
+
+    <script>
+        var app = new Vue({
+            el: '#vue-pagination',
+            data: {
+                message: 'Hello Vue!'
+            }
+        })
+    </script>
+
+
+
+
+
+
+
+</section> <!-- end s-content -->
+
+
+
+
