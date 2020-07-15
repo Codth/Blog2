@@ -60,15 +60,12 @@ app.set('views', path.join(__dirname, '/views/'));
 app.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'mainLayout', layoutsDir: __dirname + '/views/layouts/',handlebars: allowInsecurePrototypeAccess(Handlebars) }));
 app.set('view engine', 'hbs');
 
-
-var port = process.env.PORT || 3000;
-app.listen(port, () => {
+app.listen(3000, () => {
     console.log('Express server started at port : 3000');
 });
 
- 
 app.use('/', require('./controllers/index-controller'));
-// app.use('/users', require('./controllers/login-controller'));
+app.use('/users', require('./controllers/login-controller'));
 
 
 
