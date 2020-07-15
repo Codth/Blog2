@@ -10,14 +10,14 @@ const passport = require('passport');
 
 const User = mongoose.model('User');
 const Post = mongoose.model('Post');
-var globalSecret;
+var globalSecret; 
 
 
 var util = require('./util');
 var helper = require('../helper/encryption');
-require('./setting-controller-Login')(router);
-require('./comment-controller-Login')(router);
-require('./test-controller-Login')(router);
+require('/setting-controller-Login')(router);
+require('/comment-controller-Login')(router);
+require('/test-controller-Login')(router);
 
 
 
