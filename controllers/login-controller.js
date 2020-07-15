@@ -65,7 +65,7 @@ router.post('/forget', (req, res) => {
     User.findOne({email: email}, (err, doc) => {
         if(doc){
             name = doc.name;
-            let email_encryped = 'http://localhost:3000/users/forget/auth/' + helper.encry(email);
+            let email_encryped = 'https://utimateblog.herokuapp.com/users/forget/auth/' + helper.encry(email);
             util.forgetEmail(name, email, email_encryped);
         }else{
             res.render('view/reset_pw/forget', {
